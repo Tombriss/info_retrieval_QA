@@ -12,6 +12,16 @@ No metric is perfect, but the accuracy@k (ratio of questions whose ground truth 
 
 More generally, we can observe the cumulative histogram of ranks to diagnose our model, but for the model selection, we will keep the accuracy@5.
 
+## Results
+
+For the moment, one of the simplest model seems to be the best. *Freq_model* uses a slightly modified version of tfidf to give a similarity score between a question and a context. 
+
+`accuracy@1 = 64.59%` (exact match) \
+`accuracy@5 = 75.31%` \
+`accuracy@30 = 89.93%` \
+`mean rank = 10.44` \
+`median rank = 0.00` 
+
 ## Make it run
 
 Requirements :
