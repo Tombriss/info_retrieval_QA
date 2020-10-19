@@ -5,6 +5,11 @@ import os
 
 class IR_Model():
 
+  """
+  Abstract class (at least used as) for information retrieval models : 
+  encapsulates the common points each information retrieval model we build should have
+  """
+
   def __init__(self,datasets):
 
     self.datasets = datasets
@@ -21,6 +26,7 @@ class IR_Model():
   def fit(self):
     raise NotImplementedError
   
+  # Routing of attributes according to training or validation
   def predict(self,tp='valid'):
 
     data = self.datasets.valid if tp == 'valid' else self.datasets.train
@@ -38,9 +44,11 @@ class IR_Model():
     
     data.output_results(sorted_scores)
   
+  # Will be implemented in child classes
   def _predict(self,data,y_pred,y_rank,scores):
     raise NotImplementedError
-
+  
+  # Routing of attributes according to training or validation
   def evaluate(self,tp='valid'):
 
       y_pred = self.y_pred_valid if tp == 'valid' else self.y_pred_train
@@ -52,6 +60,7 @@ class IR_Model():
 
       return(self._evaluate(y_pred,y_rank,scores,data))
 
+  # Model evaluation
   def _evaluate(self,y_pred,y_rank,scores,data):
 
     for i in range(len(y_pred)):
@@ -69,6 +78,8 @@ class IR_Model():
     
     plt.savefig(os.path.join('results','ranks_hist.png'))
     print("\naccuracy@1 = {:.2%}".format(np.equal(y_pred,data.y_true).sum()/data.n_samples))
+    print("accuracy@5 = {:.2%}".format(p[0][5]))
     print("accuracy@30 = {:.2%}".format(p[0][30]))
-    print("average rank : {0:.2f}".format(np.mean(y_rank)))
+    print("mean rank : {0:.2f}".format(np.mean(y_rank)))
+    print("median rank : {0:.2f}".format(np.median(y_rank)))
     

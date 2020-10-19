@@ -4,9 +4,13 @@ import json
 
 class Dataset():
 
+  """"
+  Class Dataset : to load and manipulate data
+  """
+
   def __init__(self,FQuAD_path):
       
-    with open(FQuAD_path) as json_file:
+    with open(FQuAD_path,encoding="utf8") as json_file:
         FQuAD_data = json.load(json_file)
 
     self.data = [] # list of samples {id_query,query,id_context}
@@ -29,6 +33,7 @@ class Dataset():
     assert len(self.x) == len(self.y_true)
     assert self.n_samples > 0
 
+  # To load data
   def read_FQuAD_data(self,FQuAD_data):
     
     for text in FQuAD_data['data']:
@@ -50,6 +55,7 @@ class Dataset():
           self.x.append(q['question'])
           self.y_true.append(len(self.contexts_list)-1)
 
+  # To create json of prediction (same format as FQuAD format)
   def output_results(self,sorted_scores,topk=5):
       
       output = self.original_data.copy()
@@ -65,12 +71,19 @@ class Dataset():
                 topk_scores = sorted_scores[iq,:topk]
                 top_matching_contexts = [self.contexts_list[i] for i in topk_scores]
                 q['top_matching_contexts'] = top_matching_contexts
+
+      if not os.path.exists('results'):
+        os.makedirs('results')
       
       with open(os.path.join('results','pred.json'), 'w') as fp:
         json.dump(output, fp)
     
 
 class Datasets():
+
+  """
+  Class Datasets : to encapsulate training and validation datasets into a single object
+  """
 
   def __init__(self,FQuAD_train,FQuAD_valid):
 

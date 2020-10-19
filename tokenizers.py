@@ -5,6 +5,10 @@ import unicodedata
 
 class Tokenizer():
 
+  """
+  Class Tokenizer : to preprocess textual data, tokenize, strip accents, lemmatize and get final tokens
+  """
+
   def __init__(self,nlp = None,lemma=False,double=False):
 
     self.regtokenizer = RegexpTokenizer(r'''\w'|\w+|[^\w\s]''')
@@ -31,10 +35,3 @@ class Tokenizer():
         a = set([self.strip_accents(token.lemma_.lower()) for token in tokens if tokens.text not in string.punctuation and len(token.text)>1])
         b = set([self.strip_accents(token.text.lower()) for token in tokens if tokens.text not in string.punctuation and len(token.text)>1])
         return(list(a.union(b)))
-
-        
-
-
-      
-    
-    # lower, makes sure (once again) there is no ponctuation, takes only tokens with more than one char

@@ -8,6 +8,10 @@ from .ir_model import IR_Model
 
 class Freq_Model(IR_Model):
   
+  """
+  Class Freq_Model : a model based on tfidf to predict the best context for IR model
+  """
+  
   def __init__(self,datasets,tokenizer):
 
     IR_Model.__init__(self,datasets)
@@ -15,7 +19,8 @@ class Freq_Model(IR_Model):
     self.tokenizer = tokenizer
     self.vectorizer = TfidfVectorizer(tokenizer = tokenizer.tokenize,max_df=0.12,min_df=1,sublinear_tf=True)
     self.voc_queries = {}
-    
+  
+  # To fit the training set
   def fit(self):
 
     print("fitting training data...")
@@ -35,16 +40,16 @@ class Freq_Model(IR_Model):
         else:
           self.voc_queries[word] = 0
           
-
     with open('params.json', 'w') as fp:
         json.dump(self.voc_queries, fp)
 
+  # To load parameters of a previously trained model
   def load(self,path_params):
       
       with open(path_params, 'r') as fp:
         self.voc_queries = json.load(fp)
     
-
+  # To load parameters of a previously trained model
   def _predict(self,data,y_pred,y_rank,scores):
 
     print("infering on validation data...")
